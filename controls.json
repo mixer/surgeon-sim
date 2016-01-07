@@ -1,0 +1,110 @@
+{
+  "reportInterval": 100,
+  "joystick": [
+    {
+      "axis": 0,
+      "analysis": [
+        1
+      ]
+    },
+    {
+      "axis": 1,
+      "analysis": [
+        1
+      ]
+    }
+  ],
+  "tactile": [
+    {
+      "key": 65,
+      "up": true,
+      "down": true,
+      "analysis": [
+        1
+      ],
+      "grid": {
+        "x": 5,
+        "y": 2,
+        "width": 2,
+        "height": 3,
+        "help": "Pinkie",
+        "text": "a"
+      }
+    },
+    {
+      "key": 83,
+      "up": true,
+      "down": true,
+      "analysis": [
+        1
+      ],
+      "grid": {
+        "x": 7,
+        "y": 1,
+        "width": 2,
+        "height": 3,
+        "help": "Ringfinger",
+        "text": "s"
+      }
+    },
+    {
+      "key": 68,
+      "up": true,
+      "down": true,
+      "analysis": [
+        1
+      ],
+      "grid": {
+        "x": 9,
+        "y": 0,
+        "width": 2,
+        "height": 3,
+        "help": "Middlefinger",
+        "text": "d"
+      }
+    },
+    {
+      "key": 70,
+      "up": true,
+      "down": true,
+      "analysis": [
+        1
+      ],
+      "grid": {
+        "x": 11,
+        "y": 1,
+        "width": 2,
+        "height": 3,
+        "help": "Index finger",
+        "text": "f"
+      }
+    },
+    {
+      "key": 32,
+      "up": true,
+      "down": true,
+      "analysis": [
+        1
+      ],
+      "grid": {
+        "x": 13,
+        "y": 3,
+        "width": 4,
+        "height": 2,
+        "help": "Thumb",
+        "text": "SPACE"
+      }
+    }
+  ],
+  "grid": {
+    "width": 30,
+    "height": 20,
+    "joystick": {
+      "x": 18,
+      "y": 0,
+      "width": 6,
+      "height": 6,
+      "overlay": true
+    }
+  }
+}
