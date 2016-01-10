@@ -124,12 +124,12 @@ public class BPSurgeonSim {
                             currentQuorum = 1;
                         }
 
-                        float progress = (float) pressed / (float) currentQuorum;
+                        float progress = ((float) pressed / (float) currentQuorum) * 2;
                         if (progress < 0) {
                             progress = 0;
                         }
-                        if (progress >= 1) {
-                            progress = (float) 0.99;
+                        if (progress > 1) {
+                            progress = (float) 1;
                         }
 
                         builder.addProgress(builder.getProgressCount(),
