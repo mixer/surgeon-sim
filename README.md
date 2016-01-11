@@ -2,12 +2,14 @@
 
 ## Binaries
 
-> https://www.dropbox.com/s/pyp1gy4ew4gpu1d/SurgeonSim.zip?dl=1
+> https://www.dropbox.com/s/ckvhtrjcyv413q9/SurgeonSimv2.zip?dl=1
+
+[Clickable Link](https://www.dropbox.com/s/ckvhtrjcyv413q9/SurgeonSimv2.zip?dl=1)
 
 ## Instructions
 
 ### Step 1
-Set your game to Beam Performs Surgery 0.0.2
+Set your game to Beam Performs Surgery 0.0.2 (Game id 38)
 
 ### Step 2
 Put credentials in credentials.txt
