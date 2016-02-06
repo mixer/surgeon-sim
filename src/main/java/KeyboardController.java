@@ -1,5 +1,8 @@
+import pro.beam.interactive.net.packet.Protocol;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /*
@@ -33,6 +36,7 @@ public class KeyboardController implements Observer {
         return kbCtrl;
     }
 
+
     public boolean setMovement(int keyCode, boolean activate) {
         if (!BPSurgeonSim.getStatusListener().getActive()) {
             return false;
@@ -61,30 +65,6 @@ public class KeyboardController implements Observer {
             System.out.printf("Key: %d currently: %s, pressing: %d\n", i, this.status.get(i) ? "pressed" : "released", this.presses.get(i));
         }
         System.out.println("=============");
-    }
-
-    public int diffPress (int keyCode, int amount) {
-        int newCount = presses.get(keyCode) + amount;
-        if (newCount < 0) newCount = 0;
-        presses.put(keyCode, newCount);
-
-        return newCount;
-    }
-
-    public int getMax() {
-        int lastMax = 0;
-        for (int i : presses.values()) {
-            if (i > lastMax) lastMax = i;
-        }
-
-        return lastMax;
-    }
-
-    public void reset() {
-        for (Integer i : KeyMap.getInstance().getAllowed()) {
-            setMovement(i, false);
-            this.presses.put(i, 0);
-        }
     }
 
     public void update(Observable o, Object arg) {

@@ -36,7 +36,8 @@ OPTIONAL:
 -m: Enable movement input (NOT WORKING)
 —lab: Run against lab
 —debug: Show more debug data
--s<sens>: Change sensitivity of mouse input (Between 0 and 1)
+--noshake: disables the mouse shake option
+-s<sens>: Changes the maximal box in the center of the screen that allows mouse input (percentage, default 0.22 or 22%) (Double, between 0 and 1)
 ```
 
 ### Step 5

@@ -17,16 +17,12 @@ import java.util.TimerTask;
  * Created by your mom on 04/01/16.
  */
 public class BPSurgeonSim {
-    //These details are used to get past lab HTTP auth.
-    private static final String httpUser = "beampro";
-    private static final String httpPass = "11679";
-
     //These should be filled in with your Beam details
     private static String username;
     private static String password;
     private static int channelId;
-    private static double sensitivity = 0.2;
-    private static boolean lab = false, mouse = false, keyboard = false, updateQuorum = false, debug = false;
+    private static double sensitivity = 0.22;
+    private static boolean mouse = false, keyboard = false, updateQuorum = false, debug = false, shake = true;
 
     private static int currentQuorum = 0;
 
@@ -38,32 +34,14 @@ public class BPSurgeonSim {
         for (String str : args) {
             if (str.equals("-k")) keyboard = true;
             if (str.equals("-m")) mouse = true;
+            if (str.equals("-d")) debug = true;
+            if (str.equals("--noshake")) shake = false;
             if (str.startsWith("-c")) channelId = Integer.parseInt(str.replace("-c", ""));
             if (str.startsWith("-s")) sensitivity = Double.parseDouble(str.replace("-s", ""));
-            if (str.equals("--lab")) lab = true;
-            if (str.equals("--debug")) debug = true;
         }
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("QU");
-                updateQuorum = true;
-            }
-        }, 0L, 30000L);
-        if (debug) {
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    if (KeyboardController.getInstance() != null)
-                        KeyboardController.getInstance().printDebug();
-                }
-            }, 0L, 2000L);
-        }
-
-        if (mouse) {
-            MouseController.init(sensitivity);
+        if (mouse || shake) {
+            MouseController.init(sensitivity, shake);
         }
         if (keyboard) {
             KeyboardController.init();
@@ -75,90 +53,30 @@ public class BPSurgeonSim {
         username = creds[0];
         password = creds[1];
 
-        if (lab) {
-            beam = new BeamAPI(URI.create("https://lab.beam.pro/api/v1/"), httpUser, httpPass);
-        } else {
-            beam = new BeamAPI();
-        }
+        beam = new BeamAPI();
 
         final Robot robot = new RobotBuilder().username(username).password(password).channel(channelId).build(beam).get();
 
         //Listen for report events on the robot.
         robot.on(Protocol.Report.class, new EventListener<Protocol.Report>() {
             public void handle(Protocol.Report report) {
-                if (updateQuorum) {
-                    System.out.println("Quorum update, start: " + currentQuorum);
-                    updateQuorum = false;
-                    KeyboardController.getInstance().reset();
-                    currentQuorum = report.getQuorum();
-                    System.out.println("now: " + currentQuorum);
-                }
-//                System.out.println("REPORT " + report.getQuorum() + report.getConnected());
-                ProgressUpdate.Builder builder = ProgressUpdate.newBuilder();
 
-                if (KeyboardController.getInstance() != null) {
-                    //Iterate over all the tactile actions performed in the report
-                    for (Protocol.Report.TactileInfo tactile : report.getTactileList()) {
-                        int keyCode = tactile.getCode();
-                        int pressed = 0;
+                if (keyboard) {
+                    Protocol.Report.Users users = report.getUsers();
 
-                        //Check if more than 50% of people were holding it down.
-                        boolean passedThreshold = tactile.getDown().getMean() > THRESHOLD;
+                    //if (debug) System.out.println(users.getQuorum() + "/" + users.getConnected() + " active in quorum");
 
-//                        System.out.println("Holding " + (tactile.getDown().getFrequency()) + " quorum: " + report.getQuorum() + " Connected: " + report.getConnected());
-                        boolean changed;
-                        if (keyCode == 0 && mouse) {
-                            changed = MouseController.getInstance().setLMB(passedThreshold);
-                        } else {
-                            pressed = KeyboardController.getInstance().diffPress(keyCode, (int) (tactile.getDown().getFrequency() - tactile.getUp().getFrequency()));
-
-                            // Quorum is either the current quorum, the quorum from the report, or the max held down buttons
-                            currentQuorum = Math.max(KeyboardController.getInstance().getMax(), Math.max(currentQuorum, report.getQuorum()));
-
-                            changed = KeyboardController.getInstance().setMovement(keyCode, ((float) pressed) / ((float) currentQuorum) >= THRESHOLD);
-                        }
-
-//                        System.out.println("Tactile " + tactile.getCode() + " " + changed);
-
-                        if (currentQuorum == 0) {
-                            currentQuorum = 1;
-                        }
-
-                        float progress = ((float) pressed / (float) currentQuorum) * 2;
-                        if (progress < 0) {
-                            progress = 0;
-                        }
-                        if (progress > 1) {
-                            progress = (float) 1;
-                        }
-
-                        builder.addProgress(builder.getProgressCount(),
-                                ProgressUpdate.Progress
-                                        .newBuilder()
-                                        .setCode(keyCode)
-                                        .setFired(passedThreshold && changed)
-                                        .setTarget(ProgressUpdate.Progress.TargetType.TACTILE)
-                                        .setProgress(progress));
+                    for (Protocol.Report.TactileInfo tInfo : report.getTactileList()) {
+                        boolean pressed = KeyMap.getInstance().handleInput(tInfo, report.getUsers());
+                        // if (debug) System.out.print(tInfo.getHolding() + "/" + users.getQuorum() + " Pressed: " + (pressed ? "Yes" : "No"));
                     }
+
                 }
 
-                if (MouseController.getInstance() != null) {
-                    for (Protocol.Report.JoystickInfo joystickInfo : report.getJoystickList()) {
-//                        System.out.println(joystickInfo.getInfo().getMean());
-                        if (joystickInfo.getAxis() == 0) {
-                            MouseController.getInstance().setMouseX(joystickInfo.getInfo().getMean());
-                        } else if (joystickInfo.getAxis() == 1) {
-                            MouseController.getInstance().setMouseY(joystickInfo.getInfo().getMean());
-                        }
-                    }
-                    if (report.getJoystickCount() > 0) {
-                        MouseController.getInstance().moveMouse();
-                    }
-                }
+                ProgressUpdate pu = KeyMap.getInstance().getProgressUpdate();
 
-                if (builder.getProgressCount() == 0) return;
                 try {
-                    robot.write(builder.build());
+                    robot.write(pu);
                 } catch (IOException ex) {
                     System.err.println("Failed to send packet.");
                     ex.printStackTrace();

@@ -1,8 +1,6 @@
 import java.awt.*;
 import java.awt.event.InputEvent;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Created by jamy on 04/01/16.
@@ -10,6 +8,7 @@ import java.util.Observer;
 public class MouseController implements Observer {
 
     public static final double deadzone = 0.10;
+    private boolean shake;
     private Robot robot;
 
     private boolean LMB = false;
@@ -18,6 +17,8 @@ public class MouseController implements Observer {
     private int minHeight;
     private int maxWidth;
     private int maxHeight;
+
+    private Random random;
 
     private int width;
     private int height;
@@ -29,18 +30,20 @@ public class MouseController implements Observer {
 
     private static MouseController mCtrl;
 
-    public static void init(double sens) {
+    public static void init(double sens, boolean shake) {
 
-        mCtrl = new MouseController(sens);
+        mCtrl = new MouseController(sens, shake);
     }
 
     public static MouseController getInstance() {
         return mCtrl;
     }
 
-    public MouseController(double sens) {
+    public MouseController(double sens, boolean shake) {
         this.sensitivity = sens;
+        this.shake = shake;
         this.robot = ControlRobot.getRobot();
+        this.random = new Random();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         width = (int) screenSize.getWidth();
@@ -53,11 +56,12 @@ public class MouseController implements Observer {
         maxHeight = height - minHeight;
 
         System.out.format("Screen resolution: %dx%d\n", width, height);
-        System.out.format("Deadzone of %d%%, minW: %d, minH: %d, maxW: %d, maxH: %d\n", (int) (deadzone*100), minWidth, minHeight, maxWidth, maxHeight);
-        System.out.println("Sensitivity value of " + sens);
+        System.out.format("Border deadzone of %d%%, (minW: %d, minH: %d, maxW: %d, maxH: %d)\n", (int) (deadzone*100), minWidth, minHeight, maxWidth, maxHeight);
+        System.out.println("Mouse movement box of " + sens * 100 + "% in the center of the screen.");
     }
 
     public void setMouseX(double relativeX) {
+        if (relativeX > 1.0) relativeX = 1.0;
         relativeX -= 0.5;
         relativeX *= sensitivity;
         relativeX += 0.5;
@@ -69,6 +73,7 @@ public class MouseController implements Observer {
     }
 
     public void setMouseY(double relativeY) {
+        if (relativeY > 1.0) relativeY = 1.0;
         relativeY -= 0.5;
         relativeY *= sensitivity;
         relativeY += 0.5;
@@ -103,6 +108,35 @@ public class MouseController implements Observer {
 
         }
         return true;
+    }
+
+    public void shakeMouse() {
+        System.out.println("I'd like my mouse shaken, not stirred.");
+
+        final Timer t = new Timer();
+
+        // Move the mouse randomly every 200ms
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                randomDirection();
+            }
+        }, 0, 400);
+
+        // Stop moving after 3sec
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                t.cancel();
+            }
+        }, 5000);
+    }
+
+    public void randomDirection() {
+        setMouseX(random.nextDouble());
+        setMouseY(random.nextDouble());
+
+        moveMouse();
     }
 
     public void update(Observable o, Object arg) {
