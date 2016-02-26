@@ -1,3 +1,5 @@
+package pro.beam.games.surgeonsim;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
@@ -9,34 +11,11 @@ import java.util.logging.Logger;
 
 public class StatusListener extends Observable implements NativeKeyListener {
     private boolean active = false;
-    public void nativeKeyPressed(NativeKeyEvent e) {
-
-        if (e.getKeyCode() == 65) {
-            active = !active;
-            if (active) {
-                System.out.println("Enabling input");
-            } else {
-                System.out.println("Disabling input");
-            }
-            this.setChanged();
-            this.notifyObservers();
-        }
-
-    }
-
-    public void nativeKeyReleased(NativeKeyEvent e) {}
-
-    public void nativeKeyTyped(NativeKeyEvent e) {}
-
-    public boolean getActive() {
-        return active;
-    }
 
     public StatusListener() {
         try {
             GlobalScreen.registerNativeHook();
-        }
-        catch (NativeHookException ex) {
+        } catch (NativeHookException ex) {
             System.err.println("There was a problem registering the native hook.");
             System.err.println(ex.getMessage());
 
@@ -62,5 +41,30 @@ public class StatusListener extends Observable implements NativeKeyListener {
 
         // Don't forget to disable the parent handlers.
         logger.setUseParentHandlers(false);
+    }
+
+    public void nativeKeyPressed(NativeKeyEvent e) {
+
+        if (e.getKeyCode() == 65) {
+            active = !active;
+            if (active) {
+                System.out.println("Enabling input");
+            } else {
+                System.out.println("Disabling input");
+            }
+            this.setChanged();
+            this.notifyObservers();
+        }
+
+    }
+
+    public void nativeKeyReleased(NativeKeyEvent e) {
+    }
+
+    public void nativeKeyTyped(NativeKeyEvent e) {
+    }
+
+    public boolean getActive() {
+        return active;
     }
 }

@@ -1,6 +1,5 @@
-/**
- * Created by jamy on 04/01/16.
- */
+package pro.beam.games.surgeonsim;
+
 public enum Finger {
     PINKIE,
     RING,

@@ -1,6 +1,8 @@
+package pro.beam.games.surgeonsim;
+
 import pro.beam.interactive.net.packet.Protocol;
 
-import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -22,7 +24,13 @@ class KeyMap {
 
         handlers.put(5, new KeyHandler(-1, KeyType.SHAKE, 10.0));
 
+        allowed.addAll(Arrays.asList(65, 83, 68, 70, 32));
+
         builder = Protocol.ProgressUpdate.newBuilder();
+    }
+
+    public static KeyMap getInstance() {
+        return keyMap;
     }
 
     public boolean handleInput(Protocol.Report.TactileInfo tInfo, Protocol.Report.Users users) {
@@ -33,9 +41,9 @@ class KeyMap {
 
             Protocol.ProgressUpdate.TactileUpdate.Builder tacBuilder = Protocol.ProgressUpdate.TactileUpdate.newBuilder();
             tacBuilder
-                    .setId(tInfo.getId())
-                    .setFired(pressed)
-                    .setProgress(kHandler.getProgress());
+                .setId(tInfo.getId())
+                .setFired(pressed)
+                .setProgress(kHandler.getProgress());
 
             if (pressed) tacBuilder.setCooldown(kHandler.getCooldown());
 
@@ -50,10 +58,6 @@ class KeyMap {
         builder = Protocol.ProgressUpdate.newBuilder();
 
         return pu;
-    }
-
-    public static KeyMap getInstance() {
-        return keyMap;
     }
 
     public boolean isKeyAllowed(int keyCode) {

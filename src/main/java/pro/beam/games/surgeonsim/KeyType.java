@@ -1,6 +1,5 @@
-/**
- * Created by jamy on 05/02/16.
- */
+package pro.beam.games.surgeonsim;
+
 public enum KeyType {
     PRESS,
     SHAKE
