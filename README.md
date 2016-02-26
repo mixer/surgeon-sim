@@ -1,10 +1,10 @@
 # Beam plays Surgeon Simulator
 
-## Binaries
+## Download
 
-> https://www.dropbox.com/s/ckvhtrjcyv413q9/SurgeonSimv2.zip?dl=1
+Download [Beam plays Surgeon Simulator v1.1](https://github.com/WatchBeam/surgeon-sim/releases/tag/1.1-SNAPSHOT).
 
-[Clickable Link](https://www.dropbox.com/s/ckvhtrjcyv413q9/SurgeonSimv2.zip?dl=1)
+For all versions, check out the [releases page](https://github.com/WatchBeam/surgeon-sim/releases).
 
 ## Instructions
 
