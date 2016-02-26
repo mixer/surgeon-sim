@@ -1,43 +1,26 @@
+package pro.beam.games.surgeonsim;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.*;
 
-/**
- * Created by jamy on 04/01/16.
- */
 public class MouseController implements Observer {
 
     public static final double deadzone = 0.10;
+    private static MouseController mCtrl;
     private boolean shake;
     private Robot robot;
-
     private boolean LMB = false;
-
     private int minWidth;
     private int minHeight;
     private int maxWidth;
     private int maxHeight;
-
     private Random random;
-
     private int width;
     private int height;
-
     private int pixX;
     private int pixY;
-
     private double sensitivity;
-
-    private static MouseController mCtrl;
-
-    public static void init(double sens, boolean shake) {
-
-        mCtrl = new MouseController(sens, shake);
-    }
-
-    public static MouseController getInstance() {
-        return mCtrl;
-    }
 
     public MouseController(double sens, boolean shake) {
         this.sensitivity = sens;
@@ -56,31 +39,36 @@ public class MouseController implements Observer {
         maxHeight = height - minHeight;
 
         System.out.format("Screen resolution: %dx%d\n", width, height);
-        System.out.format("Border deadzone of %d%%, (minW: %d, minH: %d, maxW: %d, maxH: %d)\n", (int) (deadzone*100), minWidth, minHeight, maxWidth, maxHeight);
+        System.out.format("Border deadzone of %d%%, (minW: %d, minH: %d, maxW: %d, maxH: %d)\n", (int) (deadzone * 100), minWidth, minHeight, maxWidth, maxHeight);
         System.out.println("Mouse movement box of " + sens * 100 + "% in the center of the screen.");
     }
 
-    public void setMouseX(double relativeX) {
-        if (relativeX > 1.0) relativeX = 1.0;
-        relativeX -= 0.5;
-        relativeX *= sensitivity;
-        relativeX += 0.5;
+    public static void init(double sens, boolean shake) {
 
-        pixX = ((Double) Math.floor(relativeX * width)).intValue();
-//        System.out.format("movx: %d w: %d\n", pixX, width);
+        mCtrl = new MouseController(sens, shake);
+    }
+
+    public static MouseController getInstance() {
+        return mCtrl;
+    }
+
+    public void setMouseX(double relativeX) {
+        pixX = ((Double) Math.floor(getRelative(relativeX) * width)).intValue();
         if (pixX < minWidth) pixX = minWidth;
         if (pixX > maxWidth) pixX = maxWidth;
     }
 
     public void setMouseY(double relativeY) {
-        if (relativeY > 1.0) relativeY = 1.0;
-        relativeY -= 0.5;
-        relativeY *= sensitivity;
-        relativeY += 0.5;
-
-        pixY = ((Double) Math.floor(relativeY * height)).intValue();
+        pixY = ((Double) Math.floor(getRelative(relativeY) * height)).intValue();
         if (pixY < minHeight) pixY = minHeight;
         if (pixY > maxHeight) pixY = maxHeight;
+    }
+
+    private double getRelative(double relative) {
+        if (relative > 1.0) relative = 1.0;
+        relative -= 0.5;
+        relative *= sensitivity;
+        return relative + 0.5;
     }
 
     public boolean moveMouse() {

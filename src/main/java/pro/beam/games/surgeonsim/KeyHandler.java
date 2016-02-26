@@ -1,26 +1,21 @@
+package pro.beam.games.surgeonsim;
+
 import pro.beam.interactive.net.packet.Protocol;
 
-import java.security.Key;
-
-/**
- * Created by jamy on 05/02/16.
- */
 public class KeyHandler {
+    @SuppressWarnings("FieldCanBeLocal")
+    private static int shakeCooldown = 60000;
     private Integer key;
     private KeyType type;
-    private boolean state;
     private int presses;
-    private Double treshold;
+    private Double threshold;
     private Double progress;
 
-    private static int shakeCooldown = 60000;
-
-    public KeyHandler(Integer key, KeyType type, Double treshold) {
+    public KeyHandler(Integer key, KeyType type, Double threshold) {
         this.key = key;
         this.type = type;
-        this.state = false;
         presses = 0;
-        this.treshold = treshold;
+        this.threshold = threshold;
     }
 
     // TODO: subclass these types
@@ -29,6 +24,7 @@ public class KeyHandler {
             if (users.getQuorum() == 0.0) return pressKey(0.0);
             return pressKey(tInfo.getHolding() / (double) users.getQuorum());
         }
+        //noinspection SimplifiableIfStatement
         if (type == KeyType.SHAKE) {
             return shakeScreen(tInfo.getPressFrequency());
         }
@@ -58,7 +54,7 @@ public class KeyHandler {
         progress = holdingPct * 2;
         if (progress < 0.0) progress = 0.0;
         if (progress > 1.0) progress = 1.0;
-        if (holdingPct >= treshold) {
+        if (holdingPct >= threshold) {
             KeyboardController.getInstance().setMovement(key, true);
             return true;
         } else {
@@ -71,7 +67,7 @@ public class KeyHandler {
         if (type == KeyType.PRESS) {
             return progress;
         } else if (type == KeyType.SHAKE) {
-            return presses / treshold;
+            return presses / threshold;
         }
         return 0.0;
     }

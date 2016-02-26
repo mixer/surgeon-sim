@@ -1,19 +1,19 @@
-import pro.beam.interactive.net.packet.Protocol;
+package pro.beam.games.surgeonsim;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
 /*
     This class basically just wraps Java's Robot interface to allow for key control.
  */
 public class KeyboardController implements Observer {
+    private static KeyboardController kbCtrl;
     private Robot robot;
     private HashMap<Integer, Boolean> status;
     private HashMap<Integer, Integer> presses;
-
-    private static KeyboardController kbCtrl;
 
     public KeyboardController() {
         this.status = new HashMap<Integer, Boolean>();
@@ -70,7 +70,7 @@ public class KeyboardController implements Observer {
     public void update(Observable o, Object arg) {
         if (o.getClass().equals(StatusListener.class)) {
             StatusListener lis = (StatusListener) o;
-            // If the listener will be disabled, disable all keypresses
+            // If the listener will be disabled, disable all key presses
             if (!lis.getActive()) {
                 for (Map.Entry<Integer, Boolean> entry : status.entrySet()) {
                     if (entry.getValue()) {

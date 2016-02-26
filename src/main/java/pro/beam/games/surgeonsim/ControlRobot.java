@@ -1,8 +1,7 @@
+package pro.beam.games.surgeonsim;
+
 import java.awt.*;
 
-/**
- * Created by jamy on 04/01/16.
- */
 public class ControlRobot {
     private static Robot rob;
 
@@ -10,8 +9,9 @@ public class ControlRobot {
         if (rob == null) {
             try {
                 rob = new Robot();
-
-            } catch (Exception e) {}
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
         }
 
         return rob;
