@@ -8,7 +8,6 @@ public class MouseController implements Observer {
 
     public static final double deadzone = 0.10;
     private static MouseController mCtrl;
-    private boolean shake;
     private Robot robot;
     private boolean LMB = false;
     private int minWidth;
@@ -22,9 +21,8 @@ public class MouseController implements Observer {
     private int pixY;
     private double sensitivity;
 
-    public MouseController(double sens, boolean shake) {
+    public MouseController(double sens) {
         this.sensitivity = sens;
-        this.shake = shake;
         this.robot = ControlRobot.getRobot();
         this.random = new Random();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -43,9 +41,9 @@ public class MouseController implements Observer {
         System.out.println("Mouse movement box of " + sens * 100 + "% in the center of the screen.");
     }
 
-    public static void init(double sens, boolean shake) {
+    public static void init(double sens) {
 
-        mCtrl = new MouseController(sens, shake);
+        mCtrl = new MouseController(sens);
     }
 
     public static MouseController getInstance() {

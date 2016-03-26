@@ -1,0 +1,40 @@
+#content {
+    -fx-background-color: #22263E;
+}
+
+.material-button {
+    -fx-background-color: #536dfe;
+    -fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.26), 0, 5px, 0, 2);
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.material-button:hover {
+    -fx-background-color: #6c83fe;
+}
+
+.material-input {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-style: hidden hidden solid hidden;
+    -fx-border-color: rgba(255, 255, 255, 0.117647);
+    -fx-padding: 2px;
+    -fx-text-fill: white;
+}
+
+.material-input:focused {
+    -fx-border-color: #536dfe;
+}
+
+.material-label {
+    -fx-padding: 20px 0 0 0;
+}
+
+.material-label.focused {
+    -fx-text-fill: #536dfe;
+    -fx-padding: 0 0 20px 0;
+}

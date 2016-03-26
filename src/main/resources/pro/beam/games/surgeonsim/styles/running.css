@@ -1,0 +1,8 @@
+#content {
+    -fx-background-color: #22263E;
+}
+
+#running-text {
+    -fx-text-fill: #a6cd2f;
+    -fx-font-size: 24px;
+}

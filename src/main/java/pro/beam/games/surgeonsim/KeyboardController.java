@@ -16,8 +16,8 @@ public class KeyboardController implements Observer {
     private HashMap<Integer, Integer> presses;
 
     public KeyboardController() {
-        this.status = new HashMap<Integer, Boolean>();
-        this.presses = new HashMap<Integer, Integer>();
+        this.status = new HashMap<>();
+        this.presses = new HashMap<>();
         for (Integer i : KeyMap.getInstance().getAllowed()) {
             this.status.put(i, false);
             this.presses.put(i, 0);

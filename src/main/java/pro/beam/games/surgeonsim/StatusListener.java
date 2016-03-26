@@ -46,16 +46,20 @@ public class StatusListener extends Observable implements NativeKeyListener {
     public void nativeKeyPressed(NativeKeyEvent e) {
 
         if (e.getKeyCode() == 65) {
-            active = !active;
-            if (active) {
-                System.out.println("Enabling input");
-            } else {
-                System.out.println("Disabling input");
-            }
-            this.setChanged();
-            this.notifyObservers();
+            this.toggleActive();
         }
 
+    }
+
+    public void toggleActive() {
+        active = !active;
+        if (active) {
+            System.out.println("Enabling input");
+        } else {
+            System.out.println("Disabling input");
+        }
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public void nativeKeyReleased(NativeKeyEvent e) {
