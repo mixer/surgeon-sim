@@ -6,6 +6,9 @@ Download [Beam plays Surgeon Simulator v1.1](https://github.com/WatchBeam/surgeo
 
 For all versions, check out the [releases page](https://github.com/WatchBeam/surgeon-sim/releases).
 
+## Building
+mvn package
+
 ## Instructions
 
 ### Step 1

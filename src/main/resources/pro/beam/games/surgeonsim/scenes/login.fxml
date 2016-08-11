@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Hyperlink?>
 <VBox id="content" alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pro.beam.games.surgeonsim.fx.LoginController">
     <children>
         <HBox alignment="CENTER" prefWidth="268.0">
@@ -49,7 +50,7 @@
                 <Insets bottom="16.0" />
             </VBox.margin>
         </TextField>
-        <Label fx:id="passwordLabel" styleClass="material-label" text="Password" textFill="#ffffff80">
+        <Label fx:id="passwordLabel" styleClass="material-label" text="OAuth Token" textFill="#ffffff80">
             <VBox.margin>
                 <Insets bottom="-20.0" />
             </VBox.margin>
